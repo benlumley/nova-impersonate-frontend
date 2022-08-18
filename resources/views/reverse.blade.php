@@ -26,16 +26,19 @@
     "
 >
     <p>
-        @if(method_exists(auth($impersonatorGuardName)->user(), 'impersonateName'))
-            {{ __('Impersonating as') }} {{ auth($impersonatorGuardName)->user()->impersonateName() }}
-        @elseif( auth($impersonatorGuardName)->user()->name )
-            {{ __('Impersonating as') }} {{ auth($impersonatorGuardName)->user()->name }}
+        @if(method_exists(auth()->user(), 'impersonateName'))
+            {{ __('Impersonating as') }} {{ auth()->user()->impersonateName() }}
+        @elseif( auth()->user()->name )
+            {{ __('Impersonating as') }} {{ auth()->user()->name }}
         @endif
     </p>
 
-    <a href="{{ route('nova.impersonate.leave') }}" style="text-decoration:underline;color: black;font-weight: bold">
-        {{ __('Reverse impersonate!') }}
-    </a>
+    <form method="post" action="{{ route('nova.impersonate-frontend.unimpersonate') }}">
+        @csrf
+        @method('DELETE')
+        <button style="text-decoration:underline;color: black;font-weight: bold; background:none; border:none;" type="submit">{{ __('Reverse impersonate!') }}</button>
+    </form>
+
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
